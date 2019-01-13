@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback</title>
+</head>
+<body>
+<h1>This is feedback page</h1>
+<form class="form-horizontal" name="feedback" role="form" onsubmit="submit_data()" method="post">{% csrf_token %}
+    <input type="text" id="name" name="name" placeholder="Name..." class="form-control"  required />
+    <input type="email" id="email" name="email" placeholder="Email..." ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" class="form-control"  required />
+    <input type="text" name="mobile" id="mobile" placeholder="Mobile..." class="form-control" required />
+    <input type="textarea" name="message" id="message" placeholder="Feedback Message..." required/>
+    <!--<textarea class="form-control rounded-0" name="message" id="message" placeholder="Feedback Message..." rows="3" required></textarea>-->
+     <div class="form-group">
+        <div class="control-label col-sm-6 ">
+           <input type="submit" id="submit" class="btn btn-success" value="Send" />
+        </div>
+      </div>
+</form>
+</body>
+</html>

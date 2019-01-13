@@ -1,0 +1,265 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoInsights</title>
+    <!-- Core CSS - Include with every page -->
+    <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.css' %}">
+    <script type="text/javascript" src={% static "js/angular.min.js" %}></script>
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    {% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="jumbotron">
+              <p><h2>Hello&nbsp&nbsp{{ user.get_username }}</h2></p>
+              <p>You are on Vehicle Page </p>
+
+            </div><!-- jumbtron -->
+        </div>
+
+        <div id="vehicleList">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col col-xs-6">
+                  <h3 class="panel-title">Vehicle List</h3>
+                </div>
+                <div class="col col-xs-6 text-right">
+                  <button type="button" id="add" class="btn btn-default " onclick="addVehicle();">Add Vehicle</button>
+                </div>
+              </div>
+            </div>
+            <div class="panel-body">
+          <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Chasis Number</th>
+                    <th>Vehicle Number</th>
+                    <th>Manufacture Date</th>
+                    <th>Color</th>
+                    <th>Fuel Type</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+          {% for record in vehicleData %}
+              <tr >
+                <td>{{record.make}}</td>
+                <td>{{record.model}}</td>
+                <td>{{record.chasis_number}}</td>
+                <td>{{record.vehicle_number}}</td>
+                <td>{{record.manufacture_date}}</td>
+                <td>{{record.color}}</td>
+                <td>{{record.fuel_type}}</td>
+                 <td>{{record.status}}</td>
+                <td align="center">
+                  <a class="btn btn-default" title="Edit!" onclick="viewDetails({{record.id}});"><em class="fa fa-pencil"></em></a>
+                  <a class="btn btn-danger" title="Delete!" onclick="delete_data({{record.id}});"><em class="fa fa-trash"></em></a>
+                </td>
+              </tr>
+          {% endfor %}
+          </table>
+          </div>
+        </div>
+    </div> <!-- table end  -->
+
+
+
+        <div id="veh_reg" class="panel panel-primary">
+          <div class="panel-heading">
+            <!-- <div class="btn-group pull-right">
+              <a class="btn btn-default btn-sm"  >View All</a>
+            </div> -->
+            <h3 class="panel-title" style="padding-top: 7.5px;">Fill Vehicle Details</h3>
+          </div>
+          <div class="panel-body">
+              <form class="form-horizontal" role="form" onsubmit="submit_data();" >
+                  <div class="form-group">
+                      <label class="control-label col-xs-2" name="make">Make:</label>
+                        <div class="col-xs-4">
+                          <input type="text" id="make" placeholder="Make..." class="form-control"   required/>
+                        </div>
+                      <label class="control-label col-xs-2" name="Model">Model:</label>
+                        <div class="col-xs-4">
+                        <input type="text" id="model" placeholder="Model name..." class="form-control"  required/>
+                        </div>
+                  </div>
+
+                  <div class="form-group">
+                      <label class="control-label col-xs-2" name="ChasisNumber">Chasis Number:</label>
+                          <div class="col-xs-4">
+                            <input type="text" id="chasis" placeholder="Chasis Numner..." class=" form-control"  />
+                          </div>
+                      <label class="control-label col-xs-2" name="VehicleNumber">Vehicle Number:</label>
+                          <div class="col-xs-4">
+                              <input type="text" id="veh_number" placeholder="Vehicle Number..." class="form-control"  required/>
+                          </div>
+                  </div>
+                  <div class="form-group">
+                      <label class="control-label col-xs-2" name="ManufactureYear">Manufacture Year:</label>
+                          <div class="col-xs-4">
+                              <input type="date" id="manufacture" placeholder="Manufacture Year..." class="form-control"  required/>
+                          </div>
+                      <label class="control-label col-xs-2" name="VehicleColor">Vehicle Color:</label>
+                          <div class="col-xs-4">
+                              <input type="text" id="veh_color" placeholder="Vehicle Color..." class="form-control"  required/>
+                          </div>
+                  </div>
+                  <div class="form-group">
+                      <label class="control-label col-xs-2" name="FuelType">Fuel Type:</label>
+                          <div class="col-xs-4">
+                              <select id="fuel" class="form-control"  required/>
+                                      <option value="Diesel">Diesel</option>
+                                      <option value="Patrol">Patrol</option>
+                              </select>
+                          </div>
+                      <label class="control-label col-xs-2" name="request">Vehicle Delete Request Status:</label>
+                          <div class="col-xs-4">
+                              <input type="text" id="status" placeholder="Not Required Now..." class="form-control" readonly required/>
+                          </div>
+                  </div>
+
+                  <div class="form-group">
+
+                        <div class="control-label col-sm-6">
+                            <input type="submit" id="vehicle" class="btn btn-success" value="Submit"/>
+                            <input type="button" id="delete" class="btn btn-default" value="Cancel" onclick="cancelAddVehicle();" />
+
+                        </div>
+
+                  </div>
+
+              </form>
+          </div><!-- panel body -->
+        </div>
+
+
+
+
+
+    {% endblock %}
+    {% block javascript %}
+      <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'> -->
+      <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+      <!--<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">-->
+      <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+      <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+      <!--<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>-->
+      <!--<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>-->
+      <script type="text/javascript" src={% static "custom/js/ajax.js" %}?v={{version}}></script>
+      <script type="text/javascript">
+        $(document).ready(function () {
+          //$("input").prop('required',true);
+          $('#example').DataTable();
+          $("#veh_reg").hide();
+          $("#vehicleList").show();
+          $("#test_view").hide();
+          $("#delete").hide();
+
+        });
+
+        //submit vehicle details
+        function submit_data(){
+
+          console.log("inside");
+          var make = $('#make').val();
+          var model = $('#model').val();
+          var chasis = $('#chasis').val();
+          var veh_number = $('#veh_number').val();
+          var manufacture = $('#manufacture').val();
+          var veh_color = $('#veh_color').val();
+          var fuel = $('#fuel').val();
+
+          console.log( make,fuel,manufacture);
+          var options = {
+                url :'/vehicleRegistration/',
+                type: 'POST',
+                data : {
+                    make:make,
+                    model :model,
+                    chasis :chasis,
+                    veh_number :veh_number,
+                    manufacture :manufacture,
+                    veh_color :veh_color,
+                    fuel :fuel,
+
+                }
+            }
+          Ajax.send(options,function (data) {
+              alert(data.message)
+              location.reload();
+
+            });
+          $("#vehicleList").show();
+          $("#veh_reg").hide();
+
+
+        }
+      // add new vehicle
+      function addVehicle(){
+        $("#vehicleList").hide();
+        $("#veh_reg").show();
+        $("#delete").show();
+        $("#add").hide();
+      }
+      // cancel add  vehicle
+      function cancelAddVehicle(){
+        window.location.href='/allVehicle'
+
+      }
+
+      function delete_data(x){
+        var id = x
+        console.log("id",id)
+        alert(id)
+        /*url = '/delete?id='+id
+        window.location.href = url*/
+
+        var options={
+              url :'/delete-vehicle/',
+              type: 'POST',
+              data : {
+                veh_id:id,
+              }
+        }
+        Ajax.send(options,function (data) {
+            alert(data.message)
+            window.location.href = '/allVehicle'
+
+          });
+
+
+      }
+
+      // view vehicle details
+      function viewDetails(x){ // x=record.id
+        var id=x
+        var make = $('#make').val();
+        alert(id);
+        url = '/vehicle-details?id='+id
+        //url +='&make='+make
+        window.location.href = url
+        $("#vehicleList").hide();
+        $("#veh_reg").hide();
+      }
+</script>
+
+    {% endblock %}
+</body>
+
+</html>
